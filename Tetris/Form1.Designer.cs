@@ -28,13 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.tetrisControl1 = new Tetris.TetrisControl();
+            this.SuspendLayout();
+            // 
+            // tetrisControl1
+            // 
+            this.tetrisControl1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tetrisControl1.Location = new System.Drawing.Point(0, 0);
+            this.tetrisControl1.Name = "tetrisControl1";
+            this.tetrisControl1.Size = new System.Drawing.Size(250, 500);
+            this.tetrisControl1.TabIndex = 0;
+            this.tetrisControl1.Text = "tetrisControl1";
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(380, 500);
+            this.Controls.Add(this.tetrisControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "Form1";
+            this.Text = "Tetris";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private TetrisControl tetrisControl1;
     }
 }
 

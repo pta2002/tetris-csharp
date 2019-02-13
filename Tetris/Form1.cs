@@ -16,5 +16,10 @@ namespace Tetris
         {
             InitializeComponent();
         }
+
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            this.tetris.Tick();
+        }
     }
 }

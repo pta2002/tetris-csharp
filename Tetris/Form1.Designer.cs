@@ -28,24 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tetrisControl1 = new Tetris.TetrisControl();
+            this.components = new System.ComponentModel.Container();
+            this.tetris = new Tetris.TetrisControl();
+            this.GameTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
-            // tetrisControl1
+            // tetris
             // 
-            this.tetrisControl1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tetrisControl1.Location = new System.Drawing.Point(0, 0);
-            this.tetrisControl1.Name = "tetrisControl1";
-            this.tetrisControl1.Size = new System.Drawing.Size(250, 500);
-            this.tetrisControl1.TabIndex = 0;
-            this.tetrisControl1.Text = "tetrisControl1";
+            this.tetris.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tetris.Location = new System.Drawing.Point(0, 0);
+            this.tetris.Name = "tetris";
+            this.tetris.Size = new System.Drawing.Size(250, 500);
+            this.tetris.TabIndex = 0;
+            this.tetris.Text = "tetrisControl1";
+            // 
+            // GameTimer
+            // 
+            this.GameTimer.Enabled = true;
+            this.GameTimer.Interval = 250;
+            this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(380, 500);
-            this.Controls.Add(this.tetrisControl1);
+            this.Controls.Add(this.tetris);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "Tetris";
@@ -55,7 +63,8 @@
 
         #endregion
 
-        private TetrisControl tetrisControl1;
+        private TetrisControl tetris;
+        private System.Windows.Forms.Timer GameTimer;
     }
 }
 

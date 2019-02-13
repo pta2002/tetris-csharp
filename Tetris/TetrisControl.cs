@@ -32,5 +32,11 @@ namespace Tetris
                 pe.Graphics.FillRectangle(b, block.X * 25, block.Y * 25, 25, 25);
             }
         }
+
+        public void Tick()
+        {
+            Board.Tick();
+            Invalidate(true);
+        }
     }
 }

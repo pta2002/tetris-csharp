@@ -86,11 +86,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TetrisControl\TetrisControl.csproj">
-      <Project>{55EDAE42-3EB1-4A38-9640-4705FE1AF8A0}</Project>
-      <Name>TetrisControl</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,23 +28,23 @@ namespace Tetris
             base.OnPaint(pe);
             pe.Graphics.Clear(Color.Black);
 
-            Brush b = new SolidBrush(Color.DarkGray);
-            for (int x = 0; x < 20; x++)
-            {
-                for (int y = 0; y < 20; y++)
-                {
-                    pe.Graphics.FillRectangle(b, x * 25 - 1, y * 25 - 1, 2, 2);
-                }
-            }
-
+            Brush b;
             foreach (Block block in Board.GetBlocks())
             {
-                b.Dispose();
                 b = new SolidBrush(block.Color);
                 pe.Graphics.FillRectangle(b, block.X * 25, block.Y * 25, 25, 25);
+                b.Dispose();
             }
 
-            b.Dispose();
+            b = new SolidBrush(Color.FromArgb(20, Color.White));
+            for (int x=1; x<10; x++)
+            {
+                pe.Graphics.DrawLine(new Pen(b), x * 25, 0, x * 25, Height);
+            }
+            for (int y=1; y<20; y++)
+            {
+                pe.Graphics.DrawLine(new Pen(b), 0, y*25, Width, y*25);
+            }
         }
 
         public void MoveRight()

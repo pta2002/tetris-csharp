@@ -29,9 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.tetris = new Tetris.TetrisControl();
             this.GameTimer = new System.Windows.Forms.Timer(this.components);
+            this.tetris = new Tetris.TetrisControl();
             this.SuspendLayout();
+            // 
+            // GameTimer
+            // 
+            this.GameTimer.Enabled = true;
+            this.GameTimer.Interval = 150;
+            this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
             // 
             // tetris
             // 
@@ -42,12 +48,6 @@
             this.tetris.TabIndex = 0;
             this.tetris.Text = "tetrisControl1";
             // 
-            // GameTimer
-            // 
-            this.GameTimer.Enabled = true;
-            this.GameTimer.Interval = 250;
-            this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -55,6 +55,7 @@
             this.ClientSize = new System.Drawing.Size(380, 500);
             this.Controls.Add(this.tetris);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Tetris";
             this.ResumeLayout(false);

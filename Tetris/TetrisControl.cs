@@ -20,6 +20,7 @@ namespace Tetris
 
             Board = new TetrisBoard();
             DoubleBuffered = true;
+            
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -46,9 +47,27 @@ namespace Tetris
             b.Dispose();
         }
 
+        public void MoveRight()
+        {
+            Board.MoveRight();
+            Invalidate(true);
+        }
+
+        public void MoveLeft()
+        {
+            Board.MoveLeft();
+            Invalidate(true);
+        }
+
         public void Tick()
         {
             Board.Tick();
+            Invalidate(true);
+        }
+
+        public void Rotate()
+        {
+            Board.Rotate();
             Invalidate(true);
         }
     }

@@ -19,7 +19,18 @@ namespace Tetris
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            this.tetris.Tick();
+            tetris.Tick();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Left)
+                tetris.MoveLeft();
+            else if (keyData == Keys.Right)
+                tetris.MoveRight();
+            else if (keyData == Keys.Up)
+                tetris.Rotate();
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

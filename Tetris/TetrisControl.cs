@@ -59,9 +59,9 @@ namespace Tetris
             Invalidate(true);
         }
 
-        public void Tick()
+        public void Tick(int Delta)
         {
-            Board.Tick();
+            Board.Tick(Delta);
             Invalidate(true);
         }
 

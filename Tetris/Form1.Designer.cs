@@ -36,7 +36,6 @@
             // GameTimer
             // 
             this.GameTimer.Enabled = true;
-            this.GameTimer.Interval = 150;
             this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
             // 
             // tetris

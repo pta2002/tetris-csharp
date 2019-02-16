@@ -61,6 +61,7 @@
     <Compile Include="TetrisControl.Designer.cs">
       <DependentUpon>TetrisControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tetrominoes.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

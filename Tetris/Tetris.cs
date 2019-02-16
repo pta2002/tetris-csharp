@@ -23,13 +23,13 @@ namespace Tetris
 
             PiecePool = new List<Piece>(new []
             {
-                new Piece(Color.Purple, new[] { new Block(-1, 0), new Block(0, 0), new Block(1, 0), new Block(0, -1) }), // T
-                new Piece(Color.Aqua, new[] { new Block(-1, 0), new Block(0, 0), new Block(1, 0), new Block(2, 0) }),   // I
-                new Piece(Color.Yellow, new[] { new Block(1, 0), new Block(0, 0), new Block(1, 1), new Block(0, 1) }),  // O
-                new Piece(Color.DarkBlue, new[] { new Block(-1, -1), new Block(0, 0), new Block(1, 0), new Block(-1, 0) }),  // J
-                new Piece(Color.Orange, new[] { new Block(1, -1), new Block(0, 0), new Block(1, 0), new Block(-1, 0) }),  // L
-                new Piece(Color.Red, new[] { new Block(1, 1), new Block(0, 0), new Block(-1, 0), new Block(0, 1) }),  // Z
-                new Piece(Color.Green, new[] { new Block(-1, 1), new Block(0, 0), new Block(1, 0), new Block(0, 1) }),  // S
+                Tetrominoes.I,
+                Tetrominoes.J,
+                Tetrominoes.L,
+                Tetrominoes.O,
+                Tetrominoes.S,
+                Tetrominoes.T,
+                Tetrominoes.Z
             });
 
             NewPiece();
@@ -60,7 +60,7 @@ namespace Tetris
             return blocks;
         }
 
-        public void Tick()
+        public void Tick(int Delta)
         {
             if (ShouldPlace())
             {
@@ -198,72 +198,6 @@ namespace Tetris
         public Block(int x, int y)
         {
             this = new Block(Color.Red, x, y);
-        }
-    }
-
-    public struct Piece
-    {
-        public Block[] Blocks;
-        public int X, Y;
-
-        public int Height {
-            get {
-                int h = 0;
-
-                foreach (Block b in Blocks)
-                {
-                    if (b.Y > h)
-                        h = b.Y;
-                }
-
-                return h;
-            }
-        }
-
-        public int Width {
-            get {
-                int w = 0;
-
-                foreach (Block b in Blocks)
-                {
-                    if (b.X > w)
-                        w = b.X;
-                }
-
-                return w;
-            }
-        }
-
-        public Piece(Color C, Block[] blocks)
-        {
-            Blocks = blocks;
-            X = 5;
-            Y = 0;
-
-            for (int x = 0; x < Blocks.Length; x++)
-            {
-                Blocks[x].Color = C;
-            }
-        }
-
-        public Piece Rotate()
-        {
-            Block[] b = new Block[Blocks.Length];
-
-            for (int i=0; i<b.Length; i++)
-            {
-                b[i] = Blocks[i];
-                b[i].X = Blocks[i].Y;
-                b[i].Y = -Blocks[i].X;
-            }
-
-            Piece p = new Piece(b[0].Color, b)
-            {
-                X = this.X,
-                Y = this.Y
-            };
-
-            return p;
         }
     }
 }

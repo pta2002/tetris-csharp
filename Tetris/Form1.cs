@@ -19,7 +19,7 @@ namespace Tetris
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            tetris.Tick();
+            tetris.Tick(GameTimer.Interval);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

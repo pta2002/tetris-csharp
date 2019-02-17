@@ -7,7 +7,6 @@
         public static Piece L = new Piece(Colors.Orange, new[] { new Block(1, -1), new Block(-1, 0), new Block(0, 0), new Block(1, 0) });
         public static Piece O = new Piece(Colors.Yellow, new[] { new Block(1, -1), new Block(0, -1), new Block(0, 0), new Block(1, 0) })
         {
-            X = 5,
             Rotatable = false
         };
         public static Piece S = new Piece(Colors.Green, new[] { new Block(-1, 0), new Block(0, 0), new Block(0, -1), new Block(1, -1) });

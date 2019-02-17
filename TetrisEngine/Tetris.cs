@@ -12,6 +12,7 @@ namespace TetrisEngine
         List<Piece> PieceQueue;
         Random R;
         int LockOutTimer = 500;
+        int gravityTimer = 0;
 
         public TetrisBoard()
         {
@@ -65,9 +66,14 @@ namespace TetrisEngine
                 PlacePiece();
                 NewPiece();
             }
-            else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1))
+            else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1) && gravityTimer >= 200)
             {
+                gravityTimer = 0;
                 FallingPiece.Y += 1;
+            }
+            else
+            {
+                gravityTimer += Delta;
             }
         }
 

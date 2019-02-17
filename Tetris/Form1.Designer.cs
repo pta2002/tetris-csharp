@@ -57,7 +57,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.KeyPreview = true;
             this.Name = "Form1";
-            this.Text = "Tetris";
+            this.Text = "Tetris (Windows Forms)";
             this.ResumeLayout(false);
 
         }

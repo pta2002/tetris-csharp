@@ -25,7 +25,7 @@ namespace TetrisMonoGame
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferHeight = 32 * 20,
-                PreferredBackBufferWidth = 32 * 10
+                PreferredBackBufferWidth = 32 * 10 + 150
             };
             Content.RootDirectory = "Content";
         }
@@ -154,6 +154,14 @@ namespace TetrisMonoGame
             base.Update(gameTime);
         }
 
+        private void DrawBlocks(ref SpriteBatch sb, Block[] blocks, int X, int Y, float scale = 1.0f)
+        {
+            foreach (Block b in blocks)
+            {
+                sb.Draw(tetrisBlocks[b.Color], new Vector2(b.X * (32 * scale) + X, b.Y * (32 * scale) + Y), scale: new Vector2(scale, scale));
+            }
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -162,28 +170,30 @@ namespace TetrisMonoGame
         {
             GraphicsDevice.Clear(new Color(5, 5, 20));
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 
             for (int y = 1; y < 20; y++)
             {
-                spriteBatch.DrawLine(0, y*32, 32*10, y*32, lineColor);
+                spriteBatch.DrawLine(0, y*32, 32*10, y*32, lineColor, 2f);
             }
 
             for (int x = 1; x < 10; x++)
             {
-                spriteBatch.DrawLine(x*32, 0, x*32, 32*20, lineColor);
+                spriteBatch.DrawLine(x*32, 0, x*32, 32*20, lineColor, 2f);
             }
+
+            spriteBatch.DrawLine(10 * 32 + 2, 0, 10 * 32 + 2, Window.ClientBounds.Height, lineColor, 4f);
+
+            Piece nextPiece = tetrisBoard.PieceQueue[0].Normalize();
+            // TODO: Center pieces.
+            DrawBlocks(ref spriteBatch, nextPiece.Blocks, 32 * 10 + 40, 40, 0.7f);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[1].Normalize().Blocks, 32 * 10 + 40, 90, 0.5f);
 
             Piece ghostPiece = tetrisBoard.FallLocation();
             foreach (Block b in ghostPiece.Blocks)
                 spriteBatch.Draw(tetrisBlocks[b.Color], new Vector2((b.X + ghostPiece.X) * 32, (b.Y + ghostPiece.Y) * 32), new Color(Color.White, 0.3f));
-            spriteBatch.End();
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque);
-            foreach (Block b in tetrisBoard.GetBlocks())
-            {
-                spriteBatch.Draw(tetrisBlocks[b.Color], new Vector2(b.X * 32, b.Y * 32), Color.White);
-            }
+            DrawBlocks(ref spriteBatch, tetrisBoard.GetBlocks().ToArray(), 0, 0);
 
             spriteBatch.End();
 

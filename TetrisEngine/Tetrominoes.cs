@@ -68,6 +68,30 @@
             }
         }
 
+        public Piece Normalize()
+        {
+            int lowestX = int.MaxValue;
+            int lowestY = int.MaxValue;
+
+            foreach (Block blocks in Blocks)
+            {
+                if (lowestX > blocks.X)
+                    lowestX = blocks.X;
+                if (lowestY > blocks.Y)
+                    lowestY = blocks.Y;
+            }
+
+            Block[] b = new Block[Blocks.Length];
+            for (int i = 0; i < b.Length; i++)
+            {
+                b[i] = Blocks[i];
+                b[i].X -= lowestX;
+                b[i].Y -= lowestY;
+            }
+
+            return new Piece(b[0].Color, b);
+        }
+
         public Piece Rotate()
         {
             if (Rotatable)

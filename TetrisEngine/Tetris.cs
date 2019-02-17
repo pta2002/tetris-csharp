@@ -9,7 +9,7 @@ namespace TetrisEngine
         Block?[,] Blocks { get; set; }
         Piece FallingPiece;
         List<Piece> PiecePool;
-        List<Piece> PieceQueue;
+        public List<Piece> PieceQueue;
         Random R;
         int LockOutTimer = 500;
         int gravityTimer = 0;

@@ -57,6 +57,8 @@ namespace TetrisMonoGame
             {
                 if (args.Button == Buttons.DPadUp || args.Button == Buttons.Y)
                     tetrisBoard.Rotate();
+                if (args.Button == Buttons.B)
+                    tetrisBoard.PlaceDown();
             };
 
             base.Initialize();

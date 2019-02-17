@@ -14,6 +14,7 @@ namespace Tetris
         List<Piece> PiecePool;
         List<Piece> PieceQueue;
         Random R;
+        int LockOutTimer = 500;
 
         public TetrisBoard()
         {
@@ -62,12 +63,12 @@ namespace Tetris
 
         public void Tick(int Delta)
         {
-            if (ShouldPlace())
+            if (ShouldPlace(Delta))
             {
                 PlacePiece();
                 NewPiece();
             }
-            else
+            else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1))
             {
                 FallingPiece.Y += 1;
             }
@@ -151,14 +152,22 @@ namespace Tetris
             return false;
         }
 
-        private bool ShouldPlace()
+        private bool ShouldPlace(int Delta)
         {
-            foreach (Block block in FallingPiece.Blocks)
+            if (Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1))
+                LockOutTimer -= Delta;
+            else
+                LockOutTimer = 500;
+            if (LockOutTimer < 0)
             {
-                if (block.X + FallingPiece.X > 9 || block.X + FallingPiece.X < 0 || block.Y + FallingPiece.Y < 0)
-                    continue;
-                if (block.Y + FallingPiece.Y + 1> 19 || Blocks[block.X + FallingPiece.X, block.Y + FallingPiece.Y + 1].HasValue)
-                    return true;
+                foreach (Block block in FallingPiece.Blocks)
+                {
+                    if (block.X + FallingPiece.X > 9 || block.X + FallingPiece.X < 0 || block.Y + FallingPiece.Y < 0)
+                        continue;
+                    if (block.Y + FallingPiece.Y + 1 > 19 || Blocks[block.X + FallingPiece.X, block.Y + FallingPiece.Y + 1].HasValue)
+                        return true;
+                }
+                LockOutTimer = 500;
             }
             return false;
         }

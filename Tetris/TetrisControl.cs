@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TetrisEngine;
 
-namespace Tetris
+namespace TetrisWinForms
 {
     public partial class TetrisControl : Control
     {
@@ -31,7 +32,7 @@ namespace Tetris
             Brush b;
             foreach (Block block in Board.GetBlocks())
             {
-                b = new SolidBrush(block.Color);
+                b = new SolidBrush(ColorFromInt(block.Color));
                 pe.Graphics.FillRectangle(b, block.X * 25, block.Y * 25, 25, 25);
                 b.Dispose();
             }
@@ -44,6 +45,26 @@ namespace Tetris
             for (int y=1; y<20; y++)
             {
                 pe.Graphics.DrawLine(new Pen(b), 0, y*25, Width, y*25);
+            }
+        }
+
+        private static Color ColorFromInt(int color)
+        {
+            switch (color) {
+                case 0:
+                    return Color.Red;
+                case 1:
+                    return Color.Orange;
+                case 2:
+                    return Color.Aqua;
+                case 3:
+                    return Color.LimeGreen;
+                case 4:
+                    return Color.Yellow;
+                case 5:
+                    return Color.MediumPurple;
+                default:
+                    return Color.MediumBlue;
             }
         }
 

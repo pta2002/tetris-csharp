@@ -1,4 +1,4 @@
-﻿namespace Tetris
+﻿namespace TetrisWinForms
 {
     partial class Form1
     {
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.GameTimer = new System.Windows.Forms.Timer(this.components);
-            this.tetris = new Tetris.TetrisControl();
+            this.tetris = new TetrisWinForms.TetrisControl();
             this.SuspendLayout();
             // 
             // GameTimer

@@ -1,4 +1,4 @@
-﻿namespace Tetris
+﻿namespace TetrisWinForms
 {
     partial class TetrisControl
     {

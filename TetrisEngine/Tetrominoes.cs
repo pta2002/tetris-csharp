@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace Tetris
+﻿namespace TetrisEngine
 {
     class Tetrominoes
     {
-        public static Piece T = new Piece(Color.MediumPurple, new[] { new Block(-1, 0), new Block(0, 0), new Block(1, 0), new Block(0, -1) });
-        public static Piece J = new Piece(Color.MediumBlue, new[] { new Block(-1, -1), new Block(-1, 0), new Block(0, 0), new Block(1, 0) });
-        public static Piece L = new Piece(Color.Orange, new[] { new Block(1, -1), new Block(-1, 0), new Block(0, 0), new Block(1, 0) });
-        public static Piece O = new Piece(Color.Yellow, new[] { new Block(1, -1), new Block(0, -1), new Block(0, 0), new Block(1, 0) })
+        public static Piece T = new Piece(Colors.Purple, new[] { new Block(-1, 0), new Block(0, 0), new Block(1, 0), new Block(0, -1) });
+        public static Piece J = new Piece(Colors.DarkBlue, new[] { new Block(-1, -1), new Block(-1, 0), new Block(0, 0), new Block(1, 0) });
+        public static Piece L = new Piece(Colors.Orange, new[] { new Block(1, -1), new Block(-1, 0), new Block(0, 0), new Block(1, 0) });
+        public static Piece O = new Piece(Colors.Yellow, new[] { new Block(1, -1), new Block(0, -1), new Block(0, 0), new Block(1, 0) })
         {
             X = 5,
             Rotatable = false
         };
-        public static Piece S = new Piece(Color.LimeGreen, new[] { new Block(-1, 0), new Block(0, 0), new Block(0, -1), new Block(1, -1) });
-        public static Piece Z = new Piece(Color.Red, new[] { new Block(1, 0), new Block(0, 0), new Block(0, -1), new Block(-1, -1) });
-        public static Piece I = new Piece(Color.Aqua, new[] { new Block(-2, 0), new Block(-1, 0), new Block(0, 0), new Block(1, 0) })
+        public static Piece S = new Piece(Colors.Green, new[] { new Block(-1, 0), new Block(0, 0), new Block(0, -1), new Block(1, -1) });
+        public static Piece Z = new Piece(Colors.Red, new[] { new Block(1, 0), new Block(0, 0), new Block(0, -1), new Block(-1, -1) });
+        public static Piece I = new Piece(Colors.Aqua, new[] { new Block(-2, 0), new Block(-1, 0), new Block(0, 0), new Block(1, 0) })
         {
             X = 5,
             IRotate = true,
@@ -62,7 +54,7 @@ namespace Tetris
             }
         }
 
-        public Piece(Color C, Block[] blocks)
+        public Piece(int C, Block[] blocks)
         {
             Blocks = blocks;
             X = 4;
@@ -119,5 +111,16 @@ namespace Tetris
                 return this;
             }
         }
+    }
+
+    public struct Colors
+    {
+        public static int Red = 0;
+        public static int Orange = 1;
+        public static int Aqua = 2;
+        public static int Green = 3;
+        public static int Yellow = 4;
+        public static int Purple = 5;
+        public static int DarkBlue = 6;
     }
 }

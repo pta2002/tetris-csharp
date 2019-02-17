@@ -54,14 +54,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tetris.cs" />
     <Compile Include="TetrisControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TetrisControl.Designer.cs">
       <DependentUpon>TetrisControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tetrominoes.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TetrisEngine\TetrisEngine.csproj">
+      <Project>{12a308ec-e1b8-4b62-8f28-3affb774343d}</Project>
+      <Name>TetrisEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

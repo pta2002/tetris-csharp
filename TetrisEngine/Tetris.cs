@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 
-namespace Tetris
+namespace TetrisEngine
 {
     public class TetrisBoard
     {
@@ -194,10 +191,10 @@ namespace Tetris
 
     public struct Block
     {
-        public Color Color;
+        public int Color;
         public int X, Y;
 
-        public Block(Color C, int x, int y)
+        public Block(int C, int x, int y)
         {
             Color = C;
             X = x;
@@ -206,7 +203,7 @@ namespace Tetris
 
         public Block(int x, int y)
         {
-            this = new Block(Color.Red, x, y);
+            this = new Block(0, x, y);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace TetrisEngine
         {
             if (ShouldPlace(Delta))
             {
-                PlacePiece();
+                PlacePiece(FallingPiece);
                 NewPiece();
             }
             else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1) && gravityTimer >= 200)
@@ -77,13 +77,22 @@ namespace TetrisEngine
             }
         }
 
-        private void PlacePiece()
+        public void GoDown()
         {
-            foreach (Block block in FallingPiece.Blocks)
+            if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1))
+            {
+                gravityTimer = 0;
+                FallingPiece.Y += 1;
+            }
+        }
+
+        private void PlacePiece(Piece P)
+        {
+            foreach (Block block in P.Blocks)
             {
                 Block b = block;
-                b.X = FallingPiece.X + b.X;
-                b.Y = FallingPiece.Y + b.Y;
+                b.X = P.X + b.X;
+                b.Y = P.Y + b.Y;
                 if (b.X < 0 || b.X > 9 || b.Y < 0 || b.Y > 19)
                     continue;
                 Blocks[b.X, b.Y] = b;
@@ -173,6 +182,20 @@ namespace TetrisEngine
                 LockOutTimer = 500;
             }
             return false;
+        }
+
+        public void PlaceDown()
+        {
+            PlacePiece(FallLocation());
+            NewPiece();
+        }
+
+        public Piece FallLocation()
+        {
+            Piece P = FallingPiece;
+            while (!Collides(P, P.X, P.Y + 1))
+                P.Y++;
+            return P;
         }
 
         public void MoveLeft()

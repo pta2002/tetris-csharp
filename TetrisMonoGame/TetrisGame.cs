@@ -22,9 +22,11 @@ namespace TetrisMonoGame
         
         public TetrisGame()
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 32 * 20;
-            graphics.PreferredBackBufferWidth = 32 * 10;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferHeight = 32 * 20,
+                PreferredBackBufferWidth = 32 * 10
+            };
             Content.RootDirectory = "Content";
         }
 
@@ -47,6 +49,8 @@ namespace TetrisMonoGame
             {
                 if (args.Key == Keys.Up)
                     tetrisBoard.Rotate();
+                else if (args.Key == Keys.Space)
+                    tetrisBoard.PlaceDown();
             };
 
             gamePadListener.ButtonDown += (sender, args) =>
@@ -95,8 +99,10 @@ namespace TetrisMonoGame
 
             tetrisBoard.Tick(gameTime.ElapsedGameTime.Milliseconds);
 
+            bool resetTimer = true;
             if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Left))
             {
+                resetTimer = false;
                 if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
                 {
                     inTimer = 0;
@@ -110,6 +116,7 @@ namespace TetrisMonoGame
             }
             else if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Right))
             {
+                resetTimer = false;
                 if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
                 {
                     inTimer = 0;
@@ -121,7 +128,22 @@ namespace TetrisMonoGame
                     inTimer += gameTime.ElapsedGameTime.Milliseconds;
                 }
             }
-            else
+            if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                resetTimer = false;
+                if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                {
+                    inTimer = 0;
+                    presses++;
+                    tetrisBoard.GoDown();
+                }
+                else
+                {
+                    inTimer += gameTime.ElapsedGameTime.Milliseconds;
+                }
+            }
+
+            if (resetTimer)
             {
                 inTimer = 500;
                 presses = 0;
@@ -138,7 +160,7 @@ namespace TetrisMonoGame
         {
             GraphicsDevice.Clear(new Color(5, 5, 20));
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
                 
             for (int y = 1; y < 20; y++)
             {
@@ -150,6 +172,12 @@ namespace TetrisMonoGame
                 spriteBatch.DrawLine(x*32, 0, x*32, 32*20, lineColor);
             }
 
+            Piece ghostPiece = tetrisBoard.FallLocation();
+            foreach (Block b in ghostPiece.Blocks)
+                spriteBatch.Draw(tetrisBlocks[b.Color], new Vector2((b.X + ghostPiece.X) * 32, (b.Y + ghostPiece.Y) * 32), new Color(Color.White, 0.3f));
+            spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Opaque);
             foreach (Block b in tetrisBoard.GetBlocks())
             {
                 spriteBatch.Draw(tetrisBlocks[b.Color], new Vector2(b.X * 32, b.Y * 32), Color.White);

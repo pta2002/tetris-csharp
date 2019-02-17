@@ -28,8 +28,12 @@ namespace TetrisWinForms
                 tetris.MoveLeft();
             else if (keyData == Keys.Right)
                 tetris.MoveRight();
-            else if (keyData == Keys.Up)
+            if (keyData == Keys.Up)
                 tetris.Rotate();
+            if (keyData == Keys.Space)
+                tetris.PlaceDown();
+            if (keyData == Keys.Down)
+                tetris.GoDown();
             return base.ProcessCmdKey(ref msg, keyData);
         }
     }

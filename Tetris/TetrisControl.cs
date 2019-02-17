@@ -27,7 +27,7 @@ namespace TetrisWinForms
         protected override void OnPaint(PaintEventArgs pe)
         {
             base.OnPaint(pe);
-            pe.Graphics.Clear(Color.Black);
+            pe.Graphics.Clear(Color.FromArgb(5, 5, 20));
 
             Brush b;
             foreach (Block block in Board.GetBlocks())
@@ -37,7 +37,11 @@ namespace TetrisWinForms
                 b.Dispose();
             }
 
-            b = new SolidBrush(Color.FromArgb(20, Color.White));
+            Piece ghostPiece = Board.FallLocation();
+            foreach (Block block in ghostPiece.Blocks)
+                pe.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(77, ColorFromInt(block.Color))), (block.X + ghostPiece.X) * 25, (block.Y + ghostPiece.Y) * 25, 25, 25);
+
+            b = new SolidBrush(Color.FromArgb(5, 10, 40));
             for (int x=1; x<10; x++)
             {
                 pe.Graphics.DrawLine(new Pen(b), x * 25, 0, x * 25, Height);
@@ -89,6 +93,18 @@ namespace TetrisWinForms
         public void Rotate()
         {
             Board.Rotate();
+            Invalidate(true);
+        }
+
+        public void PlaceDown()
+        {
+            Board.PlaceDown();
+            Invalidate(true);
+        }
+
+        public void GoDown()
+        {
+            Board.GoDown();
             Invalidate(true);
         }
     }

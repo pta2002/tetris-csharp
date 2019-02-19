@@ -142,7 +142,7 @@ namespace TetrisEngine
         {
             if (PieceQueue == null)
                 PieceQueue = new List<Piece>();
-            while (PieceQueue.Count() < 5)
+            while (PieceQueue.Count() <= 6)
             {
                 List<Piece> pieces = PiecePool.OrderBy(x => R.Next()).ToList();
                 PieceQueue.AddRange(pieces);

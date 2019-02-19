@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
+using System;
 using TetrisEngine;
 
 namespace TetrisMonoGame
@@ -154,11 +155,21 @@ namespace TetrisMonoGame
             base.Update(gameTime);
         }
 
-        private void DrawBlocks(ref SpriteBatch sb, Block[] blocks, int X, int Y, float scale = 1.0f)
+        private void DrawBlocks(ref SpriteBatch sb, Block[] blocks, int X, int Y, float scale = 1.0f, bool center = false)
         {
+            int x, y;
+            x = X;
+            y = Y;
+
+            if (center)
+            {
+                x -= Convert.ToInt32(new Piece(blocks[0].Color, blocks).Width * scale * 32) / 2;
+                y -= Convert.ToInt32(new Piece(blocks[0].Color, blocks).Height * scale * 32) / 2;
+            }
+
             foreach (Block b in blocks)
             {
-                sb.Draw(tetrisBlocks[b.Color], new Vector2(b.X * (32 * scale) + X, b.Y * (32 * scale) + Y), scale: new Vector2(scale, scale));
+                sb.Draw(tetrisBlocks[b.Color], new Vector2(b.X * (32 * scale) + x, b.Y * (32 * scale) + y), scale: new Vector2(scale, scale));
             }
         }
 
@@ -186,8 +197,12 @@ namespace TetrisMonoGame
 
             Piece nextPiece = tetrisBoard.PieceQueue[0].Normalize();
             // TODO: Center pieces.
-            DrawBlocks(ref spriteBatch, nextPiece.Blocks, 32 * 10 + 40, 40, 0.7f);
-            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[1].Normalize().Blocks, 32 * 10 + 40, 90, 0.5f);
+            DrawBlocks(ref spriteBatch, nextPiece.Normalize().Blocks, 32 * 10 + 65, 30, 0.7f, true);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[1].Normalize().Blocks, 32 * 10 + 65, 90, 0.5f, true);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[2].Normalize().Blocks, 32 * 10 + 65, 140, 0.5f, true);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[3].Normalize().Blocks, 32 * 10 + 65, 190, 0.5f, true);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[4].Normalize().Blocks, 32 * 10 + 65, 240, 0.5f, true);
+            DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[5].Normalize().Blocks, 32 * 10 + 65, 290, 0.5f, true);
 
             Piece ghostPiece = tetrisBoard.FallLocation();
             foreach (Block b in ghostPiece.Blocks)

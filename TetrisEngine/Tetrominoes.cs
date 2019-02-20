@@ -11,10 +11,9 @@
         };
         public static Piece S = new Piece(Colors.Green, new[] { new Block(-1, 0), new Block(0, 0), new Block(0, -1), new Block(1, -1) });
         public static Piece Z = new Piece(Colors.Red, new[] { new Block(1, 0), new Block(0, 0), new Block(0, -1), new Block(-1, -1) });
-        public static Piece I = new Piece(Colors.Aqua, new[] { new Block(-2, 0), new Block(-1, 0), new Block(0, 0), new Block(1, 0) })
+        public static Piece I = new Piece(Colors.Aqua, new[] { new Block(-2, 0), new Block(-1, 0), new Block(0, 0), new Block(1, 0) }, 5)
         {
-            X = 5,
-            IRotate = true,
+            IsIPiece = true,
         };
     }
 
@@ -22,8 +21,9 @@
     {
         public Block[] Blocks;
         public int X, Y;
-        public bool Rotatable, IRotate;
-        private int RStage;
+        public int DefaultX;
+        public bool Rotatable, IsIPiece;
+        public int RStage { get; private set; }
 
         public int Height {
             get {
@@ -53,13 +53,14 @@
             }
         }
 
-        public Piece(int C, Block[] blocks)
+        public Piece(int C, Block[] blocks, int defX = 4)
         {
             Blocks = blocks;
-            X = 4;
+            DefaultX = defX;
+            X = DefaultX;
             Y = 0;
             Rotatable = true;
-            IRotate = false;
+            IsIPiece = false;
             RStage = 0;
 
             for (int x = 0; x < Blocks.Length; x++)
@@ -98,7 +99,7 @@
             {
                 Block[] b;
 
-                if (!IRotate)
+                if (!IsIPiece)
                 {
                     b = new Block[Blocks.Length];
                     for (int i = 0; i < b.Length; i++)
@@ -124,7 +125,7 @@
                     X = this.X,
                     Y = this.Y,
                     RStage = (this.RStage + 1) % 4,
-                    IRotate = this.IRotate
+                    IsIPiece = this.IsIPiece
                 };
 
                 return p;

@@ -11,7 +11,10 @@ namespace TetrisEngine
         List<Piece> PiecePool;
         public List<Piece> PieceQueue;
         Random R;
+        public Piece? HeldPiece { get; private set; }
+        bool changedHold = false;
         int LockOutTimer = 500;
+        int rots = 0;
         int gravityTimer = 0;
 
         public TetrisBoard()
@@ -20,7 +23,7 @@ namespace TetrisEngine
 
             R = new Random();
 
-            PiecePool = new List<Piece>(new []
+            PiecePool = new List<Piece>(new[]
             {
                 Tetrominoes.I,
                 Tetrominoes.J,
@@ -69,6 +72,7 @@ namespace TetrisEngine
             else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1) && gravityTimer >= 200)
             {
                 gravityTimer = 0;
+                rots = 0;
                 FallingPiece.Y += 1;
             }
             else
@@ -86,6 +90,8 @@ namespace TetrisEngine
             }
         }
 
+
+
         private void PlacePiece(Piece P)
         {
             foreach (Block block in P.Blocks)
@@ -99,7 +105,7 @@ namespace TetrisEngine
             }
 
             List<int> linesToClear = new List<int>();
-            for (int y=0;y<Blocks.GetLength(1);y++)
+            for (int y = 0; y < Blocks.GetLength(1); y++)
             {
                 bool clear = true;
                 for (int x = 0; x < Blocks.GetLength(0); x++)
@@ -115,13 +121,13 @@ namespace TetrisEngine
                     linesToClear.Add(y);
             }
 
-            for (int i = 0; i<linesToClear.Count(); i++)
+            for (int i = 0; i < linesToClear.Count(); i++)
             {
                 int y = linesToClear[i];
                 for (int x = 0; x < Blocks.GetLength(0); x++)
                     Blocks[x, y] = null;
 
-                for (int line = y-1; line >= 0; line--)
+                for (int line = y - 1; line >= 0; line--)
                 {
                     for (int x = 0; x < Blocks.GetLength(0); x++)
                     {
@@ -135,7 +141,28 @@ namespace TetrisEngine
                     }
                 }
             }
-            
+
+        }
+
+        public void Hold()
+        {
+            if (!changedHold)
+            {
+                if (HeldPiece.HasValue)
+                {
+                    Piece tmp = FallingPiece;
+                    FallingPiece = HeldPiece.Value;
+                    HeldPiece = tmp;
+                    FallingPiece.Y = 0;
+                    FallingPiece.X = FallingPiece.DefaultX;
+                }
+                else
+                {
+                    HeldPiece = FallingPiece;
+                    NewPiece();
+                }
+                changedHold = true;
+            }
         }
 
         private void NewPiece()
@@ -150,6 +177,7 @@ namespace TetrisEngine
 
             FallingPiece = PieceQueue[0];
             PieceQueue.RemoveAt(0);
+            changedHold = false;
         }
 
         private bool Collides(Piece P, int X, int Y)
@@ -213,8 +241,29 @@ namespace TetrisEngine
         public void Rotate()
         {
             Piece p = FallingPiece.Rotate();
-            if (!Collides(p, p.X, p.Y))
-                FallingPiece = p;
+
+            // Check wall kicks
+            WallKick[] kicks;
+            if (p.IsIPiece)
+                kicks = WallKick.IKicks[p.RStage];
+            else
+                kicks = WallKick.Normal[p.RStage];
+            foreach (WallKick wk in kicks)
+            {
+                if (!Collides(p, p.X + wk.CheckX, p.Y + wk.CheckY))
+                {
+                    FallingPiece = p;
+                    FallingPiece.X += wk.CheckX;
+                    FallingPiece.Y += wk.CheckY;
+                    rots++;
+
+                    if (rots < 8)
+                        LockOutTimer = 500;
+                    break;
+                }
+            }
+
+
         }
     }
 
@@ -233,6 +282,37 @@ namespace TetrisEngine
         public Block(int x, int y)
         {
             this = new Block(0, x, y);
+        }
+    }
+
+    public class WallKick
+    {
+        // https://tetris.fandom.com/wiki/SRS
+        public static WallKick[][] Normal = new[]
+        {
+            new[] { new WallKick(0, 0, 0), new WallKick(0, -1, 0), new WallKick(0, -1, -1), new WallKick(0, 0, 2), new WallKick(0, -1, 2) },
+            new[] { new WallKick(1, 0, 0), new WallKick(1, 1, 0), new WallKick(1, 1, 1), new WallKick(1, 0, -2), new WallKick(1, 1, -2) },
+            new[] { new WallKick(2, 0, 0), new WallKick(2, 1, 0), new WallKick(2, 1, -1), new WallKick(2, 0, 2), new WallKick(2, 1, 2) },
+            new[] { new WallKick(3, 0, 0), new WallKick(3, -1, 0), new WallKick(3, -1, 1), new WallKick(3, 0, -2), new WallKick(3, -1, -2) },
+        };
+
+        public static WallKick[][] IKicks = new[]
+        {
+            new[] { new WallKick(0, 0, 0), new WallKick(0, -2, 0), new WallKick(0, 1, -1), new WallKick(0, -2, 1), new WallKick(0, 1, -2) },
+            new[] { new WallKick(1, 0, 0), new WallKick(1, -1, 0), new WallKick(1, 2, 0), new WallKick(1, -1, -2), new WallKick(1, 2, 1) },
+            new[] { new WallKick(2, 0, 0), new WallKick(2, 2, 0), new WallKick(2, -1, 0), new WallKick(2, 2, -1), new WallKick(2, -1, 2) },
+            new[] { new WallKick(3, 0, 0), new WallKick(3, 1, 0), new WallKick(3, -2, 0), new WallKick(3, 1, 2), new WallKick(3, -2, -1) },
+        };
+
+        public int SourceRot { get; }
+        public int CheckX { get; }
+        public int CheckY { get; }
+
+        public WallKick(int SourceRot, int CheckX, int CheckY)
+        {
+            this.SourceRot = SourceRot;
+            this.CheckX = CheckX;
+            this.CheckY = CheckY;
         }
     }
 }

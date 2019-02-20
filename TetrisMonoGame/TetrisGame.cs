@@ -17,6 +17,7 @@ namespace TetrisMonoGame
         SpriteBatch spriteBatch;
         Texture2D[] tetrisBlocks;
         Color lineColor = new Color(5, 10, 40);
+        Color lineColorB = new Color(26, 38, 109);
         TetrisBoard tetrisBoard;
         int inTimer = 500;
         int presses = 0;
@@ -52,6 +53,8 @@ namespace TetrisMonoGame
                     tetrisBoard.Rotate();
                 else if (args.Key == Keys.Space)
                     tetrisBoard.PlaceDown();
+                else if (args.Key == Keys.C)
+                    tetrisBoard.Hold();
             };
 
             gamePadListener.ButtonDown += (sender, args) =>
@@ -203,6 +206,12 @@ namespace TetrisMonoGame
             DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[3].Normalize().Blocks, 32 * 10 + 65, 190, 0.5f, true);
             DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[4].Normalize().Blocks, 32 * 10 + 65, 240, 0.5f, true);
             DrawBlocks(ref spriteBatch, tetrisBoard.PieceQueue[5].Normalize().Blocks, 32 * 10 + 65, 290, 0.5f, true);
+
+            spriteBatch.DrawRectangle(new Vector2(32 * 10 + 20, 365), new Size2(110, 110), lineColorB, 4);
+            if (tetrisBoard.HeldPiece.HasValue)
+            {
+                DrawBlocks(ref spriteBatch, tetrisBoard.HeldPiece.Value.Normalize().Blocks, 32 * 10 + 65, 410, 0.6f, true);
+            }
 
             Piece ghostPiece = tetrisBoard.FallLocation();
             foreach (Block b in ghostPiece.Blocks)

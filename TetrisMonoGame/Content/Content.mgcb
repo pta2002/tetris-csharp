@@ -14,6 +14,24 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Eighty-Four.ttf
+/importer:
+/processor:
+/build:Eighty-Four.ttf
+
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont;EightyFour.spritefont
+
+#begin loopingtetris.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:loopingtetris.ogg
+
 #begin tetrisblocks_0.png
 /importer:TextureImporter
 /processor:TextureProcessor

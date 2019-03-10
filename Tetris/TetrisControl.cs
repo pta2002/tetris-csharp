@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TetrisEngine;
+using System.Resources;
 
 namespace TetrisWinForms
 {
@@ -32,13 +33,12 @@ namespace TetrisWinForms
             Brush b;
             foreach (Block block in Board.GetBlocks())
             {
-                b = new SolidBrush(ColorFromInt(block.Color));
-                pe.Graphics.FillRectangle(b, block.X * 25, block.Y * 25, 25, 25);
-                b.Dispose();
+                pe.Graphics.DrawImage(GetImageFromColor(block.Color), block.X * 25, block.Y * 25, 25, 25);
             }
 
             Piece ghostPiece = Board.FallLocation();
             foreach (Block block in ghostPiece.Blocks)
+                //pe.Graphics.DrawImage(GetImageFromColor(block.Color), (block.X + ghostPiece.X) * 25, (block.Y + ghostPiece.Y) * 25, 25, 25);
                 pe.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(77, ColorFromInt(block.Color))), (block.X + ghostPiece.X) * 25, (block.Y + ghostPiece.Y) * 25, 25, 25);
 
             b = new SolidBrush(Color.FromArgb(5, 10, 40));
@@ -69,6 +69,27 @@ namespace TetrisWinForms
                     return Color.MediumPurple;
                 default:
                     return Color.MediumBlue;
+            }
+        }
+
+        private static Image GetImageFromColor(int color)
+        {
+            switch (color)
+            {
+                case 0:
+                    return Tetris.Properties.Resources.tetrisblocks_0;
+                case 1:
+                    return Tetris.Properties.Resources.tetrisblocks_1;
+                case 2:
+                    return Tetris.Properties.Resources.tetrisblocks_2;
+                case 3:
+                    return Tetris.Properties.Resources.tetrisblocks_3;
+                case 4:
+                    return Tetris.Properties.Resources.tetrisblocks_4;
+                case 5:
+                    return Tetris.Properties.Resources.tetrisblocks_5;
+                default:
+                    return Tetris.Properties.Resources.tetrisblocks_6;
             }
         }
 

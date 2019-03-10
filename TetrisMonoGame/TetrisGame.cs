@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.Input.InputListeners;
 using System;
@@ -16,6 +17,7 @@ namespace TetrisMonoGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D[] tetrisBlocks;
+        Song themeSong;
         Color lineColor = new Color(5, 10, 40);
         Color lineColorB = new Color(26, 38, 109);
         TetrisBoard tetrisBoard;
@@ -55,6 +57,12 @@ namespace TetrisMonoGame
                     tetrisBoard.PlaceDown();
                 else if (args.Key == Keys.C)
                     tetrisBoard.Hold();
+                else if (args.Key == Keys.OemMinus)
+                    MediaPlayer.Volume -= 0.1f;
+                else if (args.Key == Keys.OemPlus)
+                    MediaPlayer.Volume += 0.1f;
+                else if (args.Key == Keys.M)
+                    MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
             };
 
             gamePadListener.ButtonDown += (sender, args) =>
@@ -63,6 +71,8 @@ namespace TetrisMonoGame
                     tetrisBoard.Rotate();
                 if (args.Button == Buttons.B)
                     tetrisBoard.PlaceDown();
+                if (args.Button == Buttons.RightShoulder || args.Button == Buttons.LeftShoulder)
+                    tetrisBoard.Hold();
             };
 
             base.Initialize();
@@ -82,6 +92,11 @@ namespace TetrisMonoGame
             {
                 tetrisBlocks[i] = Content.Load<Texture2D>("tetrisblocks_" + i);
             }
+
+            themeSong = Content.Load<Song>("loopingtetris");
+            MediaPlayer.Play(themeSong);
+            MediaPlayer.Volume = 0.3f;
+            MediaPlayer.IsRepeating = true;
         }
 
         /// <summary>

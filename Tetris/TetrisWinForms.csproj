@@ -96,5 +96,29 @@
       <Name>TetrisEngine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\block_0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetrisblocks_6.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

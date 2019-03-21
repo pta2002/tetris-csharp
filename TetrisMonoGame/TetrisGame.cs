@@ -21,6 +21,8 @@ namespace TetrisMonoGame
         Color lineColor = new Color(5, 10, 40);
         Color lineColorB = new Color(26, 38, 109);
         TetrisBoard tetrisBoard;
+        SpriteFont eightyFour;
+        SpriteFont eightyFourSmall;
         int inTimer = 500;
         int presses = 0;
         
@@ -51,11 +53,11 @@ namespace TetrisMonoGame
 
             keyboardListener.KeyPressed += (sender, args) =>
             {
-                if (args.Key == Keys.Up)
+                if (args.Key == Keys.Up && !tetrisBoard.IsOver)
                     tetrisBoard.Rotate();
-                else if (args.Key == Keys.Space)
+                else if (args.Key == Keys.Space && !tetrisBoard.IsOver)
                     tetrisBoard.PlaceDown();
-                else if (args.Key == Keys.C)
+                else if (args.Key == Keys.C && !tetrisBoard.IsOver)
                     tetrisBoard.Hold();
                 else if (args.Key == Keys.OemMinus)
                     MediaPlayer.Volume -= 0.1f;
@@ -63,16 +65,25 @@ namespace TetrisMonoGame
                     MediaPlayer.Volume += 0.1f;
                 else if (args.Key == Keys.M)
                     MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
+                else if (args.Key == Keys.R && tetrisBoard.IsOver)
+                {
+                    tetrisBoard = new TetrisBoard();
+                    inTimer = 500;
+                    presses = 0;
+                }
             };
 
             gamePadListener.ButtonDown += (sender, args) =>
             {
-                if (args.Button == Buttons.DPadUp || args.Button == Buttons.Y)
-                    tetrisBoard.Rotate();
-                if (args.Button == Buttons.B)
-                    tetrisBoard.PlaceDown();
-                if (args.Button == Buttons.RightShoulder || args.Button == Buttons.LeftShoulder)
-                    tetrisBoard.Hold();
+                if (!tetrisBoard.IsOver)
+                {
+                    if (args.Button == Buttons.DPadUp || args.Button == Buttons.Y)
+                        tetrisBoard.Rotate();
+                    if (args.Button == Buttons.B)
+                        tetrisBoard.PlaceDown();
+                    if (args.Button == Buttons.RightShoulder || args.Button == Buttons.LeftShoulder)
+                        tetrisBoard.Hold();
+                }
             };
 
             base.Initialize();
@@ -97,6 +108,9 @@ namespace TetrisMonoGame
             MediaPlayer.Play(themeSong);
             MediaPlayer.Volume = 0.3f;
             MediaPlayer.IsRepeating = true;
+
+            eightyFour = Content.Load<SpriteFont>("EightyFour");
+            eightyFourSmall = Content.Load<SpriteFont>("EightyFourSmall");
         }
 
         /// <summary>
@@ -120,54 +134,57 @@ namespace TetrisMonoGame
 
             tetrisBoard.Tick(gameTime.ElapsedGameTime.Milliseconds);
 
-            bool resetTimer = true;
-            if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (!tetrisBoard.IsOver)
             {
-                resetTimer = false;
-                if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                bool resetTimer = true;
+                if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
-                    inTimer = 0;
-                    presses++;
-                    tetrisBoard.MoveLeft();
+                    resetTimer = false;
+                    if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                    {
+                        inTimer = 0;
+                        presses++;
+                        tetrisBoard.MoveLeft();
+                    }
+                    else
+                    {
+                        inTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    }
                 }
-                else
+                else if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-                    inTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    resetTimer = false;
+                    if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                    {
+                        inTimer = 0;
+                        presses++;
+                        tetrisBoard.MoveRight();
+                    }
+                    else
+                    {
+                        inTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    }
                 }
-            }
-            else if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                resetTimer = false;
-                if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    inTimer = 0;
-                    presses++;
-                    tetrisBoard.MoveRight();
+                    resetTimer = false;
+                    if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
+                    {
+                        inTimer = 0;
+                        presses++;
+                        tetrisBoard.GoDown();
+                    }
+                    else
+                    {
+                        inTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    }
                 }
-                else
-                {
-                    inTimer += gameTime.ElapsedGameTime.Milliseconds;
-                }
-            }
-            if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                resetTimer = false;
-                if ((inTimer >= 30 && presses != 1) || (presses == 1 && inTimer >= 100))
-                {
-                    inTimer = 0;
-                    presses++;
-                    tetrisBoard.GoDown();
-                }
-                else
-                {
-                    inTimer += gameTime.ElapsedGameTime.Milliseconds;
-                }
-            }
 
-            if (resetTimer)
-            {
-                inTimer = 500;
-                presses = 0;
+                if (resetTimer)
+                {
+                    inTimer = 500;
+                    presses = 0;
+                }
             }
 
             base.Update(gameTime);
@@ -234,9 +251,23 @@ namespace TetrisMonoGame
 
             DrawBlocks(ref spriteBatch, tetrisBoard.GetBlocks().ToArray(), 0, 0);
 
+            if (tetrisBoard.IsOver)
+            {
+                spriteBatch.FillRectangle(new Vector2(0, 0), new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height), new Color(5, 5, 20, 128));
+                DrawStringCenter(ref spriteBatch, eightyFour, "Game Over", new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2), Color.White);
+                DrawStringCenter(ref spriteBatch, eightyFourSmall, "R to Restart", new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2 + 50), Color.White);
+            }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void DrawStringCenter(ref SpriteBatch sb, SpriteFont font, String text, Vector2 pos, Color color)
+        {
+            Vector2 s = font.MeasureString(text);
+            Vector2 newPos = (pos - s/2).Round();
+            sb.DrawString(font, text, newPos, color);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace TetrisEngine
         int LockOutTimer = 500;
         int rots = 0;
         int gravityTimer = 0;
+        public bool IsOver = false;
 
         public TetrisBoard()
         {
@@ -64,20 +65,23 @@ namespace TetrisEngine
 
         public void Tick(int Delta)
         {
-            if (ShouldPlace(Delta))
+            if (!IsOver)
             {
-                PlacePiece(FallingPiece);
-                NewPiece();
-            }
-            else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1) && gravityTimer >= 200)
-            {
-                gravityTimer = 0;
-                rots = 0;
-                FallingPiece.Y += 1;
-            }
-            else
-            {
-                gravityTimer += Delta;
+                if (ShouldPlace(Delta))
+                {
+                    PlacePiece(FallingPiece);
+                    NewPiece();
+                }
+                else if (!Collides(FallingPiece, FallingPiece.X, FallingPiece.Y + 1) && gravityTimer >= 200)
+                {
+                    gravityTimer = 0;
+                    rots = 0;
+                    FallingPiece.Y += 1;
+                }
+                else
+                {
+                    gravityTimer += Delta;
+                }
             }
         }
 
@@ -89,8 +93,6 @@ namespace TetrisEngine
                 FallingPiece.Y += 1;
             }
         }
-
-
 
         private void PlacePiece(Piece P)
         {
@@ -178,6 +180,11 @@ namespace TetrisEngine
             FallingPiece = PieceQueue[0];
             PieceQueue.RemoveAt(0);
             changedHold = false;
+
+            if (Collides(FallingPiece, FallingPiece.X, FallingPiece.Y) || IsOver)
+            {
+                IsOver = true;
+            }
         }
 
         private bool Collides(Piece P, int X, int Y)

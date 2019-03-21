@@ -14,10 +14,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Eighty-Four.ttf
-/importer:
-/processor:
-/build:Eighty-Four.ttf
+#begin EightyFourSmall.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:EightyFourSmall.spritefont
 
 #begin File.spritefont
 /importer:FontDescriptionImporter
